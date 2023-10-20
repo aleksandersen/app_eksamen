@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category view</title>
+</head>
+<body>
+
+    <h3>Helseflora</h3>
+    <hr>
+    <h1>Kategorier</h1>
+    <hr>
+    <p id="container"></p>
+
+
+
+    <script> 
+
+    let container = document.getElementById("container");
+    
+    let url = "https://sukkergris.no/plantcategories/";
+
+
+    loadData();
+
+    async function loadData(){
+
+    //Start of try
+        try {
+            let response = await fetch(url);
+
+            let data = await response.json();
+
+            console.log(data);
+
+            for(let value of data){
+                let categoryDiv = document.createElement("div");
+                categoryDiv.innerHTML = `
+                <p> ${value.kategori}</p>
+                <hr>
+                `;
+                container.appendChild(categoryDiv);
+
+                categoryDiv.addEventListener("click", function(evt){
+                    localStorage.setItem("theCategory", value.kategori);
+                    location.href = "Plant.html";
+                });
+
+            }
+        }
+
+        catch(err){
+                console.log(err);
+        }
+
+    //End of try
+    };
+        
+
+
+    </script>
+
+
+
+    <style>
+        * {
+            font-family: sans-serif;
+            background-color: rgb(26, 39, 34);
+            margin-left: 0px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            margin-left: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            color: rgb(83, 106, 83);
+        }
+
+        h3 {
+            margin: 5px;
+            color:rgb(152, 238, 143)
+
+        }
+
+        p {
+            margin: 2px;
+            color: white;
+        }
+
+        #container>div {
+            margin-left: 0px;
+            cursor: pointer; 
+        }
+
+        hr {
+            margin-left: 0px;
+            height: 1px;
+            background-color: rgb(59, 82, 63);
+            border: none;
+        }
+
+
+        
+
+
+
+
+
+
+
+    </style>
+    
+</body>
+</html>

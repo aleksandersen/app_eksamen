@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant view</title>
+</head>
+<body>
+    <button id="btnReturn"> <-- </button> 
+    <h3>Helseflora</h3>
+    <hr>
+    <h1 id="txtCategory"></h1>
+    <hr>
+    <p id="container2"></p>
+
+    
+
+    
+    
+
+    <script>
+
+        let container2 = document.getElementById("container2");
+        let txtCategory = document.getElementById("txtCategory");
+        
+        let theCategory = localStorage.getItem("theCategory");
+
+        let url = "https://sukkergris.no/plants/?category=" + theCategory;
+
+
+        loadData();
+
+    async function loadData(){
+
+    //Start of try
+        try {
+            let response = await fetch(url);
+            let data = await response.json();
+            console.log(data);
+
+            txtCategory.innerHTML = data[0].kategori;
+
+            for (let info of data){
+                let infoDiv = document.createElement("div");
+                infoDiv.innerHTML = `
+                <h3> ${info.navn}</h3>
+                <br>
+                <img src="http://sukkergris.no/plantimages/small/${info.bildefil}"
+                <br>
+                <p> ${info.beskrivelse} </p>
+                <p> kr ${info.pris},-</p>
+                
+                `;
+                container2.appendChild(infoDiv);
+
+               infoDiv.addEventListener("click", function(evt){
+                    localStorage.setItem("theId", info.id);
+                    console.log(info.id);
+                    location.href = "PlantDetail.html";
+                });
+            }
+    
+        }
+        
+        catch(err){
+                console.log(err);
+        }
+
+    //End of try
+    };
+
+
+    //Start of button
+    let btnReturn = document.getElementById("btnReturn");
+    btnReturn.addEventListener("click", function(){
+        location.href = "Category.html";
+    })
+    //End of button
+
+
+
+    </script>
+
+
+    <style>
+
+
+        h3{
+            display: inline;
+            color:rgb(152, 238, 143) /* Set the green color for the first h3 element */
+        }
+
+        h3:first-child {
+            color: rgb(255, 255, 255); /* Set the default color to white for all h3 elements */
+
+        }
+
+        h1 {
+            color: rgb(83, 106, 83);
+            padding: 10px;
+        }
+
+        p {
+            color: white;
+        }
+
+
+        * {
+            margin: 0px;
+            font-family: sans-serif;
+            box-sizing: border-box;
+            background-color: rgb(26, 39, 34);
+        }
+
+        #container2>div {
+            display: grid;
+            grid-template-columns: 100px;
+            grid-template-rows: 22px 5px 42px;
+            grid-template-areas: "im nm" 
+            "im br" 
+            "im ds"
+            "im ks";
+            border-bottom: 1px solid rgb(59, 82, 63);
+            cursor: pointer; 
+        }
+
+        #container2>div>*:not(img) {
+            padding: 5px;
+        }
+
+        #container2>div>img {
+            grid-area: im;
+            width: 100px;  
+        }
+
+        hr {
+            height: 1px;
+            background-color: rgb(59, 82, 63);
+            border: none;
+        }
+
+        button {
+            font-weight:bold;
+            background-color: rgb(43, 170, 27);
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 8px 4px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+       
+
+        
+
+
+
+
+    </style>
+    
+</body>
+</html>

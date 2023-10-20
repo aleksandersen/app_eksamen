@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant detail view</title>
+</head>
+<body>
+    <button id="btnReturn2"> <-- </button> 
+    <h3>Helseflora</h3>
+    <hr>
+    <div id="content-container"></div>   <!-- Wrapped the content in a container div to be able to center it-->
+    <h1 id="plantTitle"></h1>
+    <div id="plantDetails"></div>
+    
+
+    <script>
+
+        let plantTitle = document.getElementById("plantTitle");
+        let plantDetails = document.getElementById("plantDetails");
+    
+        
+        let theId = localStorage.getItem("theId");
+        console.log(theId)
+
+        let url = "https://sukkergris.no/plant/?id=" + theId; 
+        //Burde eg lage en ny istede for "the Category" for denne nye siden eller burde man lagre ting på samme sted? (Spørsmål til lærer)
+
+
+
+        loadData();
+
+        //Start of loadData function
+        async function loadData() {
+                //Start of try
+                try {
+                    let response = await fetch(url);
+                    let plant = await response.json();
+
+                    plantTitle.innerText = plant.navn;
+
+                    let imageSrc = `http://sukkergris.no/plantimages/large/${plant.bildefil.replace(".png", ".jpg")}`;
+
+                    plantDetails.innerHTML = `
+                    <div class="content">
+                        <img src="${imageSrc}" alt="${plant.navn}">
+                        
+                        <div class="text">
+                        <p>Kategori: ${plant.kategori}</p>
+                        <hr>
+                        <p> ${plant.beskrivelse}</p>
+                        <hr>
+                        <p>Normal høyde: ${plant.hoyde} cm</p>
+                        
+                        <p>Vekstsone: ${plant.vekstsone}</p>
+                    
+                        <p>Anbefalt gjødselmix: ${plant.nitrogen} % nitrogen, ${plant.kalium} % kalium og ${plant.fosfor} % fosfor. Bør ikke plantes his temperaturen om dagen er under ${plant.min_temp_dag} grader, eller temperaturen om natten er under ${plant.min_temp_natt} grader.</p>
+                        <hr>
+                        <p> kr ${plant.pris},- per stk.</p>
+                    </div>
+                        </div>
+                    `;
+
+                } 
+                //End of try
+
+                catch (error) {
+                    console.error("Error fetching plant details:", error);
+                }
+        }
+        //End of loadData function
+
+    
+
+    //Start of button
+    let btnReturn2 = document.getElementById("btnReturn2");
+    btnReturn2.addEventListener("click", function(){
+        location.href = "Plant.html";
+    })
+    //End of button
+
+    </script>
+
+
+
+    <style>
+
+        h3{
+            display: inline;
+        }
+
+        * {
+            font-family: sans-serif;
+            background-color: rgb(26, 39, 34);
+            margin-left: 0px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+            background-color: rgba(26, 53, 29, 0.5);
+            margin-top: 40px;
+            margin-left:1px;
+            position: absolute;
+            
+            
+        }
+
+        h3 {
+            color:rgb(152, 238, 143)
+        }
+
+        /* Using flexbox to create a single column with multiple rows */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px; /* Set maximum width for the column */
+            margin: 0 auto; /* Center the column horizontally */
+        }
+
+        p {
+            color: white;
+            margin-left: 0;
+        }
+
+        
+
+        img {
+            width: 400px; 
+        }
+
+        /* Style for the text */
+        .text {
+            text-align: left;
+        }
+
+
+        hr {
+            margin-left:0px;
+            padding: 0px;
+            height: 1px;
+            background-color: rgb(59, 82, 63);
+            border: none;
+        }
+
+        button {
+            font-weight:bold;
+            background-color: rgb(43, 170, 27);
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 8px 4px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+       
+
+
+    </style>
+   
+
+    
+</body>
+</html>
